@@ -26,6 +26,11 @@ public static void main(String[] args) {
         System.out.print("\nSeleccione una opción: ");
         opcion = sc.nextInt();
 
+        // Validar opción
+        if (opcion < 1 || opcion > 6) {
+            IO.println(" Opción no válida.");
+        }
+
         // AÑADIR ALUMNO
         if (opcion == 1) {
             sc.nextLine();
@@ -37,8 +42,14 @@ public static void main(String[] args) {
             IO.println("Introduzca la nota (0-10):");
             double nota = sc.nextDouble();
 
-            Alumno a = new Alumno(nombre, nota);
-            alumnos.add(a);
+            // Validar nota
+            if (nota < 0 || nota > 10) {
+                IO.println(" La nota debe estar entre 0 y 10.");
+            } else {
+                Alumno a = new Alumno(nombre, nota);
+                alumnos.add(a);
+                IO.println("Alumno añadido correctamente ✔");
+            }
         }
 
         // VER ALUMNOS
@@ -59,8 +70,13 @@ public static void main(String[] args) {
                 // MOSTRAR TODOS
                 if (opcionMostar == 1) {
                     IO.println("\n--- LISTADO DE ALUMNOS ---");
-                    for (Alumno alumno : alumnos) {
-                        System.out.println("- " + alumno);
+
+                    if (alumnos.isEmpty()) {
+                        IO.println("⚠ No hay alumnos registrados.");
+                    } else {
+                        for (Alumno alumno : alumnos) {
+                            System.out.println("- " + alumno);
+                        }
                     }
                 }
 
@@ -90,17 +106,22 @@ public static void main(String[] args) {
                     IO.println("Ingrese la nota del alumno:");
                     double buscarNota = sc.nextDouble();
 
-                    boolean encontrado = false;
+                    // Validar nota
+                    if (buscarNota < 0 || buscarNota > 10) {
+                        IO.println(" Nota inválida.");
+                    } else {
+                        boolean encontrado = false;
 
-                    for (Alumno a : alumnos) {
-                        if (Double.compare(a.getNota(), buscarNota) == 0) {
-                            IO.println(a);
-                            encontrado = true;
+                        for (Alumno a : alumnos) {
+                            if (Double.compare(a.getNota(), buscarNota) == 0) {
+                                IO.println(a);
+                                encontrado = true;
+                            }
                         }
-                    }
 
-                    if (!encontrado) {
-                        IO.println("No hay ningún alumno con esa nota");
+                        if (!encontrado) {
+                            IO.println("No hay ningún alumno con esa nota");
+                        }
                     }
                 }
 
@@ -129,14 +150,20 @@ public static void main(String[] args) {
                     String eliminarNombre = sc.nextLine();
 
                     Iterator<Alumno> it = alumnos.iterator();
+                    boolean eliminado = false;
 
                     while (it.hasNext()) {
                         Alumno i = it.next();
 
                         if (i.getNombre().equalsIgnoreCase(eliminarNombre)) {
                             it.remove();
+                            eliminado = true;
                             IO.println("Alumno eliminado correctamente ✔");
                         }
+                    }
+
+                    if (!eliminado) {
+                        IO.println("No se encontró ningún alumno con ese nombre");
                     }
                 }
 
@@ -146,14 +173,25 @@ public static void main(String[] args) {
                     IO.println("Ingrese la nota del alumno a eliminar:");
                     double eliminarNota = sc.nextDouble();
 
-                    Iterator<Alumno> it = alumnos.iterator();
+                    // Validar nota
+                    if (eliminarNota < 0 || eliminarNota > 10) {
+                        IO.println(" Nota inválida.");
+                    } else {
+                        Iterator<Alumno> it = alumnos.iterator();
+                        boolean eliminado = false;
 
-                    while (it.hasNext()) {
-                        Alumno i = it.next();
+                        while (it.hasNext()) {
+                            Alumno i = it.next();
 
-                        if (Double.compare(i.getNota(), eliminarNota) == 0) {
-                            IO.println("Se ha eliminado el alumno: " + i);
-                            it.remove();
+                            if (Double.compare(i.getNota(), eliminarNota) == 0) {
+                                IO.println("Se ha eliminado el alumno: " + i);
+                                it.remove();
+                                eliminado = true;
+                            }
+                        }
+
+                        if (!eliminado) {
+                            IO.println("No se encontró ningún alumno con esa nota");
                         }
                     }
                 }
